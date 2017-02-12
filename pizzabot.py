@@ -6,21 +6,18 @@ from address import Address
 
 
 def main():
-    # Get STDIN args
+    # Get command line args
     args = sys.argv
 
     # Build grid from args
-    grid = parse_grid_arg(str(args[1]))
+    grid = parse_grid_arg(args[1])
 
     # Build addresses from args
-    address_args = args[2:]
-    addresses = []
-    for address_arg in address_args:
-        addresses.append(parse_address_arg(address_arg, grid))
+    for address_arg in args[2:]:
+        parse_address_arg(address_arg, grid)
 
-    # TODO: make this happen! folks need pizza!
-    calculate_route(addresses, grid)
-
+    # Calculate and display route
+    print grid.calculate_route()
 
 
 def parse_grid_arg(grid_arg):
@@ -37,13 +34,15 @@ def parse_grid_arg(grid_arg):
 
     # Split on the 'x' and grab x and y size
     grid_arg_array = grid_arg.split('x')
-    x = int(grid_arg_array[0])
-    y = int(grid_arg_array[1])
+    width = int(grid_arg_array[0])
+    height = int(grid_arg_array[1])
 
-    if x < 1 or y < 1:
+    # Dimensions must be positive
+    if width < 1 or height < 1:
         raise Exception("Grid size must be declared using positive numbers")
 
-    return Grid(x, y)
+    # Switch to width and height!
+    return Grid(width, height)
 
 
 def parse_address_arg(address_arg, grid):
@@ -61,19 +60,18 @@ def parse_address_arg(address_arg, grid):
             "Address coordinates must be declared matching format 1,3"
         )
 
-    # Split on the 'x' and grab x and y size
+    # Split on the ',' and grab x and y coordinates
     address_arg_array = address_arg.split(',')
     x = int(address_arg_array[0])
     y = int(address_arg_array[1])
 
-    if x > grid.x or y > grid.y:
+    # Coordinates must fit on grid
+    if x > grid.width or y > grid.height:
         raise Exception("Address coordinates must fit on grid")
 
-    return Address(x, y)
-
-
-def calculate_route(addresses, grid):
-    pass
+    # Create new Address object and add to grid
+    address = Address(x, y)
+    grid.addresses.append(address)
 
 
 if __name__ == "__main__":
