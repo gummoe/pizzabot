@@ -30,7 +30,7 @@ def parse_grid_arg(grid_arg):
     """
     pattern = re.compile('^[0-9]*x[0-9]*$')
     if not pattern.match(grid_arg):
-        raise Exception("Grid size must be declared matching format 5x5")
+        raise ValueError("Grid size must be declared matching format 5x5")
 
     # Split on the 'x' and grab x and y size
     grid_arg_array = grid_arg.split('x')
@@ -39,7 +39,7 @@ def parse_grid_arg(grid_arg):
 
     # Dimensions must be positive
     if width < 1 or height < 1:
-        raise Exception("Grid size must be declared using positive numbers")
+        raise ValueError("Grid size must be declared using positive numbers")
 
     # Switch to width and height!
     return Grid(width, height)
@@ -56,7 +56,7 @@ def parse_address_arg(address_arg, grid):
     """
     pattern = re.compile('^[0-9]*,[0-9]*$')
     if not pattern.match(address_arg):
-        raise Exception(
+        raise ValueError(
             "Address coordinates must be declared matching format 1,3"
         )
 
@@ -67,7 +67,7 @@ def parse_address_arg(address_arg, grid):
 
     # Coordinates must fit on grid
     if x > grid.width or y > grid.height:
-        raise Exception("Address coordinates must fit on grid")
+        raise ValueError("Address coordinates must fit on grid")
 
     # Create new Address object and add to grid
     address = Address(x, y)
